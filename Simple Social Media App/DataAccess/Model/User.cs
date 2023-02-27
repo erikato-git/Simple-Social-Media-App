@@ -1,0 +1,21 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Simple_Social_Media_App.DataAccess.Model
+{
+    public class User
+    {
+        // TODO: change Id to UUID later
+        public int Id { get; set; }
+        [Required]
+        public string Email { get; set; } = string.Empty;
+        [Required]
+        public string Password { get; set; } = string.Empty;
+        public int Salt { get; set; }
+        [Required]
+        public string Full_Name { get; set; } = string.Empty;
+        public byte[]? Profile_Picture { get; set; }
+        public DateTime? DateOfBirth { get; set; } = DateTime.UtcNow;
+        public string? Description { get; set; }
+
+    }
+}
