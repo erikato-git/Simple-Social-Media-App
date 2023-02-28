@@ -12,8 +12,8 @@ using Simple_Social_Media_App.DataAccess;
 namespace Simple_Social_Media_App.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230218213813_Init")]
-    partial class Init
+    [Migration("20230227222704_First")]
+    partial class First
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,7 +59,7 @@ namespace Simple_Social_Media_App.Migrations
                         {
                             Id = 1,
                             Content = "Bo Warmming - Thumbs Up ...",
-                            CreatedAt = new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3992),
+                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1249),
                             PostId = 1,
                             UserId = 2
                         },
@@ -67,7 +67,7 @@ namespace Simple_Social_Media_App.Migrations
                         {
                             Id = 2,
                             Content = "Rasmus Paludan - Thumbs Up ...",
-                            CreatedAt = new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3997),
+                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1253),
                             PostId = 2,
                             UserId = 3
                         },
@@ -75,7 +75,7 @@ namespace Simple_Social_Media_App.Migrations
                         {
                             Id = 3,
                             Content = "Per Hansen - Thumbs Up ...",
-                            CreatedAt = new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3999),
+                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1254),
                             PostId = 3,
                             UserId = 1
                         });
@@ -112,21 +112,21 @@ namespace Simple_Social_Media_App.Migrations
                         {
                             Id = 1,
                             Content = "Per Hansen ...",
-                            CreatedAt = new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3963),
+                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1188),
                             UserId = 1
                         },
                         new
                         {
                             Id = 2,
                             Content = "Bo Warmming ...",
-                            CreatedAt = new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3967),
+                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1195),
                             UserId = 2
                         },
                         new
                         {
                             Id = 3,
                             Content = "Rasmus Paludan ...",
-                            CreatedAt = new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3968),
+                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1196),
                             UserId = 3
                         });
                 });
@@ -160,6 +160,9 @@ namespace Simple_Social_Media_App.Migrations
                     b.Property<byte[]>("Profile_Picture")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<int>("Salt")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -168,37 +171,40 @@ namespace Simple_Social_Media_App.Migrations
                         new
                         {
                             Id = 1,
-                            DateOfBirth = new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3659),
+                            DateOfBirth = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(898),
                             Email = "user1@mail.com",
                             Full_Name = "Per Hansen",
-                            Password = "pa$$w0rd"
+                            Password = "pa$$w0rd",
+                            Salt = 0
                         },
                         new
                         {
                             Id = 2,
-                            DateOfBirth = new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3667),
+                            DateOfBirth = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(905),
                             Email = "user2@mail.com",
                             Full_Name = "Bo Warmming",
-                            Password = "pa$$w0rd"
+                            Password = "pa$$w0rd",
+                            Salt = 0
                         },
                         new
                         {
                             Id = 3,
-                            DateOfBirth = new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3669),
+                            DateOfBirth = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(907),
                             Email = "user3@mail.com",
                             Full_Name = "Rasmus Paludan",
-                            Password = "pa$$w0rd"
+                            Password = "pa$$w0rd",
+                            Salt = 0
                         });
                 });
 
             modelBuilder.Entity("Simple_Social_Media_App.DataAccess.Model.Comment", b =>
                 {
                     b.HasOne("Simple_Social_Media_App.DataAccess.Model.Post", "Post")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("PostId");
 
                     b.HasOne("Simple_Social_Media_App.DataAccess.Model.User", "User")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Post");
@@ -209,10 +215,22 @@ namespace Simple_Social_Media_App.Migrations
             modelBuilder.Entity("Simple_Social_Media_App.DataAccess.Model.Post", b =>
                 {
                     b.HasOne("Simple_Social_Media_App.DataAccess.Model.User", "User")
-                        .WithMany()
+                        .WithMany("Posts")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Simple_Social_Media_App.DataAccess.Model.Post", b =>
+                {
+                    b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("Simple_Social_Media_App.DataAccess.Model.User", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

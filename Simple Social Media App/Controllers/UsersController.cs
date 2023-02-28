@@ -1,13 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Simple_Social_Media_App.Controllers.DTOs;
-using Simple_Social_Media_App.DataAccess;
 using Simple_Social_Media_App.DataAccess.Model;
 using Simple_Social_Media_App.Repositories.Interfaces;
+using System.Security.Claims;
 
 namespace Simple_Social_Media_App.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
@@ -18,7 +22,8 @@ namespace Simple_Social_Media_App.Controllers
         }
 
         // GET: api/Users
-        [HttpGet]
+        [HttpGet("/get_all_users")]
+
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             try
@@ -37,7 +42,7 @@ namespace Simple_Social_Media_App.Controllers
         }
 
         // GET: api/Users/5
-        [HttpGet("{id}")]
+        [HttpGet("/get_user/{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
             try
@@ -57,7 +62,7 @@ namespace Simple_Social_Media_App.Controllers
 
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("/update_user/{id}")]
         public async Task<IActionResult> PutUser(int id, UserDTO userDTO)
         {
             try
@@ -78,7 +83,8 @@ namespace Simple_Social_Media_App.Controllers
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("/create_user")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserDTO>> PostUser(UserDTO userDto)
         {
             try
@@ -93,13 +99,59 @@ namespace Simple_Social_Media_App.Controllers
         }
 
         // DELETE: api/Users/5
-        [HttpDelete("{id}")]
+        [HttpDelete("/delete_user/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             try
             {
                 await _userRepository.DeleteUser(id);
                 return StatusCode(200, id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPost("/login")]
+        [AllowAnonymous]
+        public async Task<ActionResult> Login(LoginDTO loginDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Redirect("/login");
+                }
+                var found = await _userRepository.FindUserForLogin(loginDto);
+
+                if (found == null)
+                {
+                    return NotFound();
+                }
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, found.Full_Name),
+                    new Claim(ClaimTypes.NameIdentifier, found.Id.ToString()),
+                    new Claim(ClaimTypes.Role, "User")
+                };
+
+                var ci = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var cp = new ClaimsPrincipal(ci);
+
+                var properties = new AuthenticationProperties()
+                {
+                    AllowRefresh = true,
+                    IsPersistent = true
+                };
+
+                await HttpContext.SignInAsync(cp, properties);
+
+                return Ok("Succes!");
+                //return LocalRedirect("/api/Posts/Home");
+
             }
             catch (Exception ex)
             {

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Simple_Social_Media_App.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class First : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,6 +21,7 @@ namespace Simple_Social_Media_App.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Salt = table.Column<int>(type: "int", nullable: false),
                     Full_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Profile_Picture = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -80,12 +81,12 @@ namespace Simple_Social_Media_App.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "DateOfBirth", "Description", "Email", "Full_Name", "Password", "Profile_Picture" },
+                columns: new[] { "Id", "DateOfBirth", "Description", "Email", "Full_Name", "Password", "Profile_Picture", "Salt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3659), null, "user1@mail.com", "Per Hansen", "pa$$w0rd", null },
-                    { 2, new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3667), null, "user2@mail.com", "Bo Warmming", "pa$$w0rd", null },
-                    { 3, new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3669), null, "user3@mail.com", "Rasmus Paludan", "pa$$w0rd", null }
+                    { 1, new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(898), null, "user1@mail.com", "Per Hansen", "pa$$w0rd", null, 0 },
+                    { 2, new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(905), null, "user2@mail.com", "Bo Warmming", "pa$$w0rd", null, 0 },
+                    { 3, new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(907), null, "user3@mail.com", "Rasmus Paludan", "pa$$w0rd", null, 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -93,9 +94,9 @@ namespace Simple_Social_Media_App.Migrations
                 columns: new[] { "Id", "Content", "CreatedAt", "Image", "UserId" },
                 values: new object[,]
                 {
-                    { 1, "Per Hansen ...", new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3963), null, 1 },
-                    { 2, "Bo Warmming ...", new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3967), null, 2 },
-                    { 3, "Rasmus Paludan ...", new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3968), null, 3 }
+                    { 1, "Per Hansen ...", new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1188), null, 1 },
+                    { 2, "Bo Warmming ...", new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1195), null, 2 },
+                    { 3, "Rasmus Paludan ...", new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1196), null, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -103,9 +104,9 @@ namespace Simple_Social_Media_App.Migrations
                 columns: new[] { "Id", "Content", "CreatedAt", "PostId", "UserId" },
                 values: new object[,]
                 {
-                    { 1, "Bo Warmming - Thumbs Up ...", new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3992), 1, 2 },
-                    { 2, "Rasmus Paludan - Thumbs Up ...", new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3997), 2, 3 },
-                    { 3, "Per Hansen - Thumbs Up ...", new DateTime(2023, 2, 18, 21, 38, 13, 687, DateTimeKind.Utc).AddTicks(3999), 3, 1 }
+                    { 1, "Bo Warmming - Thumbs Up ...", new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1249), 1, 2 },
+                    { 2, "Rasmus Paludan - Thumbs Up ...", new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1253), 2, 3 },
+                    { 3, "Per Hansen - Thumbs Up ...", new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1254), 3, 1 }
                 });
 
             migrationBuilder.CreateIndex(

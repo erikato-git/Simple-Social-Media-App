@@ -19,7 +19,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 
+builder.Services.AddAuthentication()
+    .AddCookie("cookie", o =>
+    {
+        o.Cookie.Name = "SSMA";
+        o.ExpireTimeSpan = TimeSpan.FromHours(2);
+        o.LoginPath = "/api/Users/login";
+    });
 
 
 var app = builder.Build();
@@ -33,8 +41,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers()
+    .RequireAuthorization();    // Require login for all endpoint that are not declared 'AllowAnonymous'
 
 app.Run();

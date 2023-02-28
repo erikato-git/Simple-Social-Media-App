@@ -12,5 +12,6 @@ namespace Simple_Social_Media_App.DataAccess.Model
         public int? UserId { get; set; }
         [JsonIgnore]
         public User? User { get; set; }
+        public ICollection<Comment>? Comments { get; set; }
     }
 }
