@@ -22,7 +22,7 @@ namespace Simple_Social_Media_App.DataAccess
                     Id = 1,
                     Email = "user1@mail.com",
                     Password = "pa$$w0rd",
-                    Full_Name = "Per Hansen"
+                    Full_Name = "Per Hansen",
                 },
                 new User
                 {
@@ -33,7 +33,7 @@ namespace Simple_Social_Media_App.DataAccess
                 },
                 new User
                 {
-                    Id= 3,
+                    Id = 3,
                     Email = "user3@mail.com",
                     Password = "pa$$w0rd",
                     Full_Name = "Rasmus Paludan"

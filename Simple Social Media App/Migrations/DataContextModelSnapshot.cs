@@ -56,7 +56,7 @@ namespace Simple_Social_Media_App.Migrations
                         {
                             Id = 1,
                             Content = "Bo Warmming - Thumbs Up ...",
-                            CreatedAt = new DateTime(2023, 2, 18, 23, 16, 19, 647, DateTimeKind.Utc).AddTicks(3665),
+                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1249),
                             PostId = 1,
                             UserId = 2
                         },
@@ -64,7 +64,7 @@ namespace Simple_Social_Media_App.Migrations
                         {
                             Id = 2,
                             Content = "Rasmus Paludan - Thumbs Up ...",
-                            CreatedAt = new DateTime(2023, 2, 18, 23, 16, 19, 647, DateTimeKind.Utc).AddTicks(3669),
+                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1253),
                             PostId = 2,
                             UserId = 3
                         },
@@ -72,7 +72,7 @@ namespace Simple_Social_Media_App.Migrations
                         {
                             Id = 3,
                             Content = "Per Hansen - Thumbs Up ...",
-                            CreatedAt = new DateTime(2023, 2, 18, 23, 16, 19, 647, DateTimeKind.Utc).AddTicks(3672),
+                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1254),
                             PostId = 3,
                             UserId = 1
                         });
@@ -109,21 +109,21 @@ namespace Simple_Social_Media_App.Migrations
                         {
                             Id = 1,
                             Content = "Per Hansen ...",
-                            CreatedAt = new DateTime(2023, 2, 18, 23, 16, 19, 647, DateTimeKind.Utc).AddTicks(3639),
+                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1188),
                             UserId = 1
                         },
                         new
                         {
                             Id = 2,
                             Content = "Bo Warmming ...",
-                            CreatedAt = new DateTime(2023, 2, 18, 23, 16, 19, 647, DateTimeKind.Utc).AddTicks(3642),
+                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1195),
                             UserId = 2
                         },
                         new
                         {
                             Id = 3,
                             Content = "Rasmus Paludan ...",
-                            CreatedAt = new DateTime(2023, 2, 18, 23, 16, 19, 647, DateTimeKind.Utc).AddTicks(3644),
+                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1196),
                             UserId = 3
                         });
                 });
@@ -168,7 +168,7 @@ namespace Simple_Social_Media_App.Migrations
                         new
                         {
                             Id = 1,
-                            DateOfBirth = new DateTime(2023, 2, 18, 23, 16, 19, 647, DateTimeKind.Utc).AddTicks(3356),
+                            DateOfBirth = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(898),
                             Email = "user1@mail.com",
                             Full_Name = "Per Hansen",
                             Password = "pa$$w0rd",
@@ -177,7 +177,7 @@ namespace Simple_Social_Media_App.Migrations
                         new
                         {
                             Id = 2,
-                            DateOfBirth = new DateTime(2023, 2, 18, 23, 16, 19, 647, DateTimeKind.Utc).AddTicks(3363),
+                            DateOfBirth = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(905),
                             Email = "user2@mail.com",
                             Full_Name = "Bo Warmming",
                             Password = "pa$$w0rd",
@@ -186,7 +186,7 @@ namespace Simple_Social_Media_App.Migrations
                         new
                         {
                             Id = 3,
-                            DateOfBirth = new DateTime(2023, 2, 18, 23, 16, 19, 647, DateTimeKind.Utc).AddTicks(3364),
+                            DateOfBirth = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(907),
                             Email = "user3@mail.com",
                             Full_Name = "Rasmus Paludan",
                             Password = "pa$$w0rd",
@@ -197,11 +197,11 @@ namespace Simple_Social_Media_App.Migrations
             modelBuilder.Entity("Simple_Social_Media_App.DataAccess.Model.Comment", b =>
                 {
                     b.HasOne("Simple_Social_Media_App.DataAccess.Model.Post", "Post")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("PostId");
 
                     b.HasOne("Simple_Social_Media_App.DataAccess.Model.User", "User")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Post");
@@ -212,10 +212,22 @@ namespace Simple_Social_Media_App.Migrations
             modelBuilder.Entity("Simple_Social_Media_App.DataAccess.Model.Post", b =>
                 {
                     b.HasOne("Simple_Social_Media_App.DataAccess.Model.User", "User")
-                        .WithMany()
+                        .WithMany("Posts")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Simple_Social_Media_App.DataAccess.Model.Post", b =>
+                {
+                    b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("Simple_Social_Media_App.DataAccess.Model.User", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

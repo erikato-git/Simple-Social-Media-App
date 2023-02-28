@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Simple_Social_Media_App.Controllers.DTOs;
@@ -6,6 +8,7 @@ using Simple_Social_Media_App.DataAccess;
 using Simple_Social_Media_App.DataAccess.Model;
 using Simple_Social_Media_App.Repositories.Interfaces;
 using System.ComponentModel;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -98,5 +101,25 @@ namespace Simple_Social_Media_App.Repositories
 
             return;
         }
+
+        public async Task<User?> FindUserForLogin(LoginDTO loginDto)
+        {
+            var emailFound = await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(loginDto.Email));
+            if(emailFound == null)
+            {
+                return null;
+            }
+            var hashedPassword = HashPassword(loginDto.Password + emailFound.Salt);
+            
+            var found = await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(loginDto.Email) && x.Password.Equals(hashedPassword));
+            if(found == null)
+            {
+                return null;
+            };
+
+            return found;
+        }
+
+
     }
 }
