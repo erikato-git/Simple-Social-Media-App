@@ -1,9 +1,10 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Simple_Social_Media_App.DataAccess;
 using Simple_Social_Media_App.Repositories;
 using Simple_Social_Media_App.Repositories.Interfaces;
 using static System.Net.Mime.MediaTypeNames;
+using Simple_Social_Media_App.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,5 +47,6 @@ app.UseAuthorization();
 
 app.MapControllers()
     .RequireAuthorization();    // Require login for all endpoint that are not declared 'AllowAnonymous'
+
 
 app.Run();

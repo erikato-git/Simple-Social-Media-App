@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Azure;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Simple_Social_Media_App.Controllers.DTOs;
 using Simple_Social_Media_App.DataAccess.Model;
 using Simple_Social_Media_App.Repositories.Interfaces;
+using System.Linq;
 using System.Security.Claims;
 
 namespace Simple_Social_Media_App.Controllers
@@ -20,6 +22,7 @@ namespace Simple_Social_Media_App.Controllers
         {
             _userRepository = userRepository;
         }
+
 
         // GET: api/Users
         [HttpGet("/get_all_users")]
@@ -67,6 +70,19 @@ namespace Simple_Social_Media_App.Controllers
         {
             try
             {
+                var loginId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (String.IsNullOrEmpty(loginId))
+                {
+                    return BadRequest("You need to log in again");
+                }
+
+                // Check that logged in user doesn't edit another user
+                if(!loginId.Equals(id.ToString()))
+                {
+                    return BadRequest("Wrong user");
+                }
+
                 var result = await _userRepository.UpdateUser(id, userDTO);
                 if(result == null )
                 {
@@ -104,6 +120,16 @@ namespace Simple_Social_Media_App.Controllers
         {
             try
             {
+                var loginId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if(String.IsNullOrEmpty(loginId)) { return BadRequest("You need to log in again"); };
+
+                // Check that logged in user doesn't delete another user
+                if (!loginId.Equals(id.ToString()))
+                {
+                    return BadRequest("Wrong user");
+                }
+
                 await _userRepository.DeleteUser(id);
                 return StatusCode(200, id);
             }
@@ -116,7 +142,7 @@ namespace Simple_Social_Media_App.Controllers
 
         [HttpPost("/login")]
         [AllowAnonymous]
-        public async Task<ActionResult> Login(LoginDTO loginDto)
+        public async Task<ActionResult> LogIn(LoginDTO loginDto)
         {
             try
             {
@@ -149,7 +175,7 @@ namespace Simple_Social_Media_App.Controllers
 
                 await HttpContext.SignInAsync(cp, properties);
 
-                return Ok("Succes!");
+                return Ok("Log in!");
                 //return LocalRedirect("/api/Posts/Home");
 
             }
@@ -158,6 +184,24 @@ namespace Simple_Social_Media_App.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("/logout")]
+        public async Task<ActionResult> LogOut()
+        {
+            try
+            {
+                await HttpContext.SignOutAsync();
+
+                return Ok("Log out!");
+                //return LocalRedirect("/api/Users/login");
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
     }
 }
