@@ -8,7 +8,9 @@ namespace Simple_Social_Media_App.Utils
     {
         public MapperService()
         {
-            CreateMap<UserDTO, User>(); // For POST
+            CreateMap<UserDTO, User>(); 
+            CreateMap<UpdatePostDTO, Post>();
+            CreateMap<CreatePostDTO, Post>();
 
         }
     }
