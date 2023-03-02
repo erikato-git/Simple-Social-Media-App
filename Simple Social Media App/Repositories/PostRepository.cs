@@ -25,7 +25,7 @@ namespace Simple_Social_Media_App.Repositories
             return await _dataContext.Posts.ToListAsync();
         }
 
-        public async Task<Post?> GetById(int id)
+        public async Task<Post?> GetById(Guid id)
         {
             if (String.IsNullOrEmpty(id.ToString()))
             {
@@ -44,7 +44,7 @@ namespace Simple_Social_Media_App.Repositories
 
         // Commands
 
-        public async Task<Post?> UpdatePost(int id, UpdatePostDTO updatePostDto)
+        public async Task<Post?> UpdatePost(Guid id, UpdatePostDTO updatePostDto)
         {
             if (String.IsNullOrEmpty(id.ToString()) || updatePostDto == null)
             {
@@ -72,7 +72,7 @@ namespace Simple_Social_Media_App.Repositories
             }
 
             var post = _mapper.Map<Post>(postDto);
-            post.UserId = user.Id;
+            post.UserId = user.UserId;
             post.User = user;
 
             await _dataContext.Posts.AddAsync(post);
@@ -82,7 +82,7 @@ namespace Simple_Social_Media_App.Repositories
 
         }
 
-        public async Task DeletePost(int id)
+        public async Task DeletePost(Guid id)
         {
             if (String.IsNullOrEmpty(id.ToString()))
             {

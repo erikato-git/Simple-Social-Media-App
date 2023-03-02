@@ -6,10 +6,10 @@ namespace Simple_Social_Media_App.Repositories.Interfaces
     public interface IPostRepository
     {
         Task<List<Post>?> GetAll();
-        Task<Post?> GetById(int id);
+        Task<Post?> GetById(Guid id);
         Task<Post> CreatePost(CreatePostDTO postDto, User user);
-        Task<Post?> UpdatePost(int id, UpdatePostDTO postDto);
-        Task DeletePost(int id);
+        Task<Post?> UpdatePost(Guid id, UpdatePostDTO postDto);
+        Task DeletePost(Guid id);
 
     }
 }

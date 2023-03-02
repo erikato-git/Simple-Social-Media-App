@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Simple_Social_Media_App.Migrations
 {
     /// <inheritdoc />
-    public partial class First : Migration
+    public partial class deletebevavior_setnull : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,8 +17,7 @@ namespace Simple_Social_Media_App.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Salt = table.Column<int>(type: "int", nullable: false),
@@ -29,84 +28,85 @@ namespace Simple_Social_Media_App.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Posts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: true)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Posts", x => x.Id);
+                    table.PrimaryKey("PK_Posts", x => x.PostId);
                     table.ForeignKey(
                         name: "FK_Posts_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: true)
+                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.PrimaryKey("PK_Comments", x => x.CommentId);
                     table.ForeignKey(
                         name: "FK_Comments_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
-                        principalColumn: "Id");
+                        principalColumn: "PostId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Comments_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "DateOfBirth", "Description", "Email", "Full_Name", "Password", "Profile_Picture", "Salt" },
+                columns: new[] { "UserId", "DateOfBirth", "Description", "Email", "Full_Name", "Password", "Profile_Picture", "Salt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(898), null, "user1@mail.com", "Per Hansen", "pa$$w0rd", null, 0 },
-                    { 2, new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(905), null, "user2@mail.com", "Bo Warmming", "pa$$w0rd", null, 0 },
-                    { 3, new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(907), null, "user3@mail.com", "Rasmus Paludan", "pa$$w0rd", null, 0 }
+                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa111"), new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4448), null, "user1@mail.com", "user 1", "123", null, 0 },
+                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa112"), new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4478), null, "user2@mail.com", "user 2", "123", null, 0 },
+                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa113"), new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4482), null, "user3@mail.com", "user 3", "123", null, 0 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Posts",
-                columns: new[] { "Id", "Content", "CreatedAt", "Image", "UserId" },
+                columns: new[] { "PostId", "Content", "CreatedAt", "Image", "UserId" },
                 values: new object[,]
                 {
-                    { 1, "Per Hansen ...", new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1188), null, 1 },
-                    { 2, "Bo Warmming ...", new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1195), null, 2 },
-                    { 3, "Rasmus Paludan ...", new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1196), null, 3 }
+                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa211"), "user 1", new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4739), null, new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa111") },
+                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa212"), "user 2", new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4747), null, new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa112") },
+                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa213"), "user 3", new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4750), null, new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa113") }
                 });
 
             migrationBuilder.InsertData(
                 table: "Comments",
-                columns: new[] { "Id", "Content", "CreatedAt", "PostId", "UserId" },
+                columns: new[] { "CommentId", "Content", "CreatedAt", "PostId", "UserId" },
                 values: new object[,]
                 {
-                    { 1, "Bo Warmming - Thumbs Up ...", new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1249), 1, 2 },
-                    { 2, "Rasmus Paludan - Thumbs Up ...", new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1253), 2, 3 },
-                    { 3, "Per Hansen - Thumbs Up ...", new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1254), 3, 1 }
+                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa311"), "comment 1", new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4775), new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa211"), new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa111") },
+                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa312"), "comment 2", new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4783), new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa212"), new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa112") },
+                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa313"), "comment 3", new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4787), new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa211"), new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa111") }
                 });
 
             migrationBuilder.CreateIndex(

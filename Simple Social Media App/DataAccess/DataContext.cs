@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Simple_Social_Media_App.DataAccess.Model;
+using System.Reflection.Emit;
+using System.Runtime.Intrinsics.X86;
 
 namespace Simple_Social_Media_App.DataAccess
 {
@@ -16,76 +19,127 @@ namespace Simple_Social_Media_App.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Relations
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(e => e.UserId);
+
+                entity.HasMany(e => e.Posts)
+                    .WithOne(e => e.User)
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasMany(e => e.Comments)
+                    .WithOne(e => e.User)
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+            });
+
+            modelBuilder.Entity<Post>(entity =>
+            {
+                entity.HasKey(e => e.PostId);
+
+                entity.HasMany(e => e.Comments)
+                    .WithOne(e => e.Post)
+                    .HasForeignKey(e => e.PostId)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Seeding
+
+            var userId1 = "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAA111";
+            var userId2 = "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAA112";
+            var userId3 = "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAA113";
+
+            var postId1 = "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAA211";
+            var postId2 = "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAA212";
+            var postId3 = "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAA213";
+
+            var commentId1 = "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAA311";
+            var commentId2 = "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAA312";
+            var commentId3 = "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAA313";
+
+
             modelBuilder.Entity<User>().HasData(
+
                 new User
                 {
-                    Id = 1,
+                    UserId = Guid.Parse(userId1),
                     Email = "user1@mail.com",
-                    Password = "pa$$w0rd",
-                    Full_Name = "Per Hansen",
+                    Password = "123",
+                    Full_Name = "user 1",
                 },
+
                 new User
                 {
-                    Id = 2,
+                    UserId = Guid.Parse(userId2),
                     Email = "user2@mail.com",
-                    Password = "pa$$w0rd",
-                    Full_Name = "Bo Warmming"
+                    Password = "123",
+                    Full_Name = "user 2",
                 },
+
                 new User
                 {
-                    Id = 3,
+                    UserId = Guid.Parse(userId3),
                     Email = "user3@mail.com",
-                    Password = "pa$$w0rd",
-                    Full_Name = "Rasmus Paludan"
+                    Password = "123",
+                    Full_Name = "user 3",
                 }
             );
+
 
             modelBuilder.Entity<Post>().HasData(
+
                 new Post
                 {
-                    Id = 1,
-                    Content = "Per Hansen ...",
-                    UserId = 1,
+                    PostId = Guid.Parse(postId1),
+                    Content = "user 1",
+                    UserId = Guid.Parse(userId1),
                 },
                 new Post
                 {
-                    Id = 2,
-                    Content = "Bo Warmming ...",
-                    UserId = 2,
+                    PostId = Guid.Parse(postId2),
+                    Content = "user 2",
+                    UserId = Guid.Parse(userId2),
                 },
                 new Post
                 {
-                    Id = 3,
-                    Content = "Rasmus Paludan ...",
-                    UserId = 3,
+                    PostId = Guid.Parse(postId3),
+                    Content = "user 3",
+                    UserId = Guid.Parse(userId3),
                 }
             );
+
 
             modelBuilder.Entity<Comment>().HasData(
+
                 new Comment
                 {
-                    Id = 1,
-                    Content = "Bo Warmming - Thumbs Up ...",
-                    PostId = 1,
-                    UserId = 2,
+                    CommentId = Guid.Parse(commentId1),
+                    Content = "comment 1",
+                    UserId = Guid.Parse(userId1),
+                    PostId = Guid.Parse(postId1),
                 },
                 new Comment
                 {
-                    Id = 2,
-                    Content = "Rasmus Paludan - Thumbs Up ...",
-                    PostId = 2,
-                    UserId = 3,
+                    CommentId = Guid.Parse(commentId2),
+                    Content = "comment 2",
+                    UserId = Guid.Parse(userId2),
+                    PostId = Guid.Parse(postId2),
                 },
                 new Comment
                 {
-                    Id = 3,
-                    Content = "Per Hansen - Thumbs Up ...",
-                    PostId = 3,
-                    UserId = 1,
+                    CommentId = Guid.Parse(commentId3),
+                    Content = "comment 3",
+                    UserId = Guid.Parse(userId1),
+                    PostId = Guid.Parse(postId1),
                 }
             );
-
-
         }
     }
 }
+
+

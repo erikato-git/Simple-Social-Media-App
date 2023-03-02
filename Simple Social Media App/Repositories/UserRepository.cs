@@ -32,7 +32,7 @@ namespace Simple_Social_Media_App.Repositories
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<User?> GetById(int id)
+        public async Task<User?> GetById(Guid id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -51,7 +51,7 @@ namespace Simple_Social_Media_App.Repositories
             Random rnd = new();
             int salt = rnd.Next();
             
-            userDto.Password = HashPassword(userDto.Password + salt);
+            userDto.Password = HashPassword(userDto.Password,salt.ToString());
             var user = _mapper.Map<User>(userDto);
 
             user.Salt = salt;
@@ -62,18 +62,20 @@ namespace Simple_Social_Media_App.Repositories
             return user;
         }
 
-        private string HashPassword(string password)
+        private string HashPassword(string password, string salt)
         {
+            var passwordWithSalt = password + salt;
+
             using var sha = SHA512.Create();
             
-            var bytes = Encoding.Default.GetBytes(password);
+            var bytes = Encoding.Default.GetBytes(passwordWithSalt);
 
             var hashed = sha.ComputeHash(bytes);
 
             return Convert.ToBase64String(hashed);
         }
 
-        public async Task<User?> UpdateUser(int id, UserDTO userDto)
+        public async Task<User?> UpdateUser(Guid id, UserDTO userDto)
         {
             var found = await _context.Users.FindAsync(id);
             if(found == null)
@@ -81,13 +83,15 @@ namespace Simple_Social_Media_App.Repositories
                 return null;
             }
 
+            userDto.Password = HashPassword(userDto.Password, found.Salt.ToString());
+
             _mapper.Map(userDto, found);
             _context.SaveChanges();
 
             return found;
         }
 
-        public async Task DeleteUser(int id)
+        public async Task DeleteUser(Guid id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -95,6 +99,8 @@ namespace Simple_Social_Media_App.Repositories
             {
                 throw new Exception("User not found");
             }
+
+            // Remove objects attached to the user
 
             _context.Users.Remove(user);
             _context.SaveChanges();
@@ -109,7 +115,7 @@ namespace Simple_Social_Media_App.Repositories
             {
                 return null;
             }
-            var hashedPassword = HashPassword(loginDto.Password + emailFound.Salt);
+            var hashedPassword = HashPassword(loginDto.Password, emailFound.Salt.ToString());
             
             var found = await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(loginDto.Email) && x.Password.Equals(hashedPassword));
             if(found == null)

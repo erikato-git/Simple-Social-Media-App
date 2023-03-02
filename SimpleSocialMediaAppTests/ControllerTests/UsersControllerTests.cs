@@ -95,7 +95,7 @@ namespace SimpleSocialMediaAppTests.ControllerTests
             var controller = await createUsersControllerMoqAsync();
 
             // Act
-            var result = await controller.GetUser(firtInDb.Id);
+            var result = await controller.GetUser(firtInDb.UserId);
 
             // Assert
             Assert.NotNull(result);
@@ -122,7 +122,7 @@ namespace SimpleSocialMediaAppTests.ControllerTests
             UserDTO dto = new UserDTO { Full_Name = "New User Name", Email = firtInDb.Email, Password = firtInDb.Password };
 
             // Act
-            var result = await controller.PutUser(firtInDb.Id, dto);
+            var result = await controller.PutUser(firtInDb.UserId, dto);
 
             // Assert
             Assert.NotNull(result);
@@ -132,7 +132,7 @@ namespace SimpleSocialMediaAppTests.ControllerTests
 
             Assert.Equal(StatusCodes.Status200OK, response.StatusCode);
             Assert.NotNull(actual);
-            Assert.Equal(firtInDb.Id, actual.Id);
+            Assert.Equal(firtInDb.UserId, actual.UserId);
             Assert.NotEqual(firtInDb.Full_Name, actual.Full_Name);
             Assert.Equal(firtInDb.Email, actual.Email);
 
@@ -190,7 +190,7 @@ namespace SimpleSocialMediaAppTests.ControllerTests
             //await controller.HttpContext.SignInAsync(cp);
 
             // Act
-            var result = await controller.DeleteUser(firstInDb.Id);
+            var result = await controller.DeleteUser(firstInDb.UserId);
 
             // Assert
             Assert.NotNull(result);

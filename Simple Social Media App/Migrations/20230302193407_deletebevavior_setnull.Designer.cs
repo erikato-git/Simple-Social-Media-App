@@ -12,8 +12,8 @@ using Simple_Social_Media_App.DataAccess;
 namespace Simple_Social_Media_App.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230227222704_First")]
-    partial class First
+    [Migration("20230302193407_deletebevavior_setnull")]
+    partial class deletebevavior_setnull
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,9 @@ namespace Simple_Social_Media_App.Migrations
 
             modelBuilder.Entity("Simple_Social_Media_App.DataAccess.Model.Comment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("CommentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -40,13 +38,14 @@ namespace Simple_Social_Media_App.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("PostId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("PostId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("CommentId");
 
                     b.HasIndex("PostId");
 
@@ -57,37 +56,35 @@ namespace Simple_Social_Media_App.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Content = "Bo Warmming - Thumbs Up ...",
-                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1249),
-                            PostId = 1,
-                            UserId = 2
+                            CommentId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa311"),
+                            Content = "comment 1",
+                            CreatedAt = new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4775),
+                            PostId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa211"),
+                            UserId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa111")
                         },
                         new
                         {
-                            Id = 2,
-                            Content = "Rasmus Paludan - Thumbs Up ...",
-                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1253),
-                            PostId = 2,
-                            UserId = 3
+                            CommentId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa312"),
+                            Content = "comment 2",
+                            CreatedAt = new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4783),
+                            PostId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa212"),
+                            UserId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa112")
                         },
                         new
                         {
-                            Id = 3,
-                            Content = "Per Hansen - Thumbs Up ...",
-                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1254),
-                            PostId = 3,
-                            UserId = 1
+                            CommentId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa313"),
+                            Content = "comment 3",
+                            CreatedAt = new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4787),
+                            PostId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa211"),
+                            UserId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa111")
                         });
                 });
 
             modelBuilder.Entity("Simple_Social_Media_App.DataAccess.Model.Post", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("PostId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
@@ -98,10 +95,10 @@ namespace Simple_Social_Media_App.Migrations
                     b.Property<byte[]>("Image")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("PostId");
 
                     b.HasIndex("UserId");
 
@@ -110,34 +107,32 @@ namespace Simple_Social_Media_App.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Content = "Per Hansen ...",
-                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1188),
-                            UserId = 1
+                            PostId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa211"),
+                            Content = "user 1",
+                            CreatedAt = new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4739),
+                            UserId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa111")
                         },
                         new
                         {
-                            Id = 2,
-                            Content = "Bo Warmming ...",
-                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1195),
-                            UserId = 2
+                            PostId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa212"),
+                            Content = "user 2",
+                            CreatedAt = new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4747),
+                            UserId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa112")
                         },
                         new
                         {
-                            Id = 3,
-                            Content = "Rasmus Paludan ...",
-                            CreatedAt = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(1196),
-                            UserId = 3
+                            PostId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa213"),
+                            Content = "user 3",
+                            CreatedAt = new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4750),
+                            UserId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa113")
                         });
                 });
 
             modelBuilder.Entity("Simple_Social_Media_App.DataAccess.Model.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -163,36 +158,36 @@ namespace Simple_Social_Media_App.Migrations
                     b.Property<int>("Salt")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            DateOfBirth = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(898),
+                            UserId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa111"),
+                            DateOfBirth = new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4448),
                             Email = "user1@mail.com",
-                            Full_Name = "Per Hansen",
-                            Password = "pa$$w0rd",
+                            Full_Name = "user 1",
+                            Password = "123",
                             Salt = 0
                         },
                         new
                         {
-                            Id = 2,
-                            DateOfBirth = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(905),
+                            UserId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa112"),
+                            DateOfBirth = new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4478),
                             Email = "user2@mail.com",
-                            Full_Name = "Bo Warmming",
-                            Password = "pa$$w0rd",
+                            Full_Name = "user 2",
+                            Password = "123",
                             Salt = 0
                         },
                         new
                         {
-                            Id = 3,
-                            DateOfBirth = new DateTime(2023, 2, 27, 22, 27, 4, 292, DateTimeKind.Utc).AddTicks(907),
+                            UserId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaa113"),
+                            DateOfBirth = new DateTime(2023, 3, 2, 19, 34, 7, 463, DateTimeKind.Utc).AddTicks(4482),
                             Email = "user3@mail.com",
-                            Full_Name = "Rasmus Paludan",
-                            Password = "pa$$w0rd",
+                            Full_Name = "user 3",
+                            Password = "123",
                             Salt = 0
                         });
                 });
@@ -201,11 +196,14 @@ namespace Simple_Social_Media_App.Migrations
                 {
                     b.HasOne("Simple_Social_Media_App.DataAccess.Model.Post", "Post")
                         .WithMany("Comments")
-                        .HasForeignKey("PostId");
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Simple_Social_Media_App.DataAccess.Model.User", "User")
                         .WithMany("Comments")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Post");
 
@@ -216,7 +214,8 @@ namespace Simple_Social_Media_App.Migrations
                 {
                     b.HasOne("Simple_Social_Media_App.DataAccess.Model.User", "User")
                         .WithMany("Posts")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("User");
                 });
