@@ -5,7 +5,8 @@ namespace Simple_Social_Media_App.DataAccess.Model
     public class User
     {
         // TODO: change Id to UUID later
-        public int Id { get; set; }
+        [Key]
+        public Guid UserId { get; set; }
         [Required]
         public string Email { get; set; } = string.Empty;
         [Required]

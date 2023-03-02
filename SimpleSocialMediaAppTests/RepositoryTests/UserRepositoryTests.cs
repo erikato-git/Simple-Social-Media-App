@@ -64,8 +64,8 @@ namespace SimpleSocialMediaAppTests.RepositoryTests
             var fakeDb = await GetDbContext();
             var fakeMapper = A.Fake<IMapper>();
             var userRepository = new UserRepository(fakeDb, fakeMapper);
-            var none_id = fakeDb.Users.Count() + 1;
-            var exist_id = fakeDb.Users.ToList().First().Id;
+            var none_id = Guid.Parse("");
+            var exist_id = fakeDb.Users.ToList().First().UserId;
 
             // Act
             var result1 = await userRepository.GetById(none_id);
@@ -117,7 +117,7 @@ namespace SimpleSocialMediaAppTests.RepositoryTests
             var old_user_tmp = fakeDb.Users.ToList().First();
             var old_user = new User()
             {
-                Id = old_user_tmp.Id,
+                UserId = old_user_tmp.UserId,
                 Full_Name = old_user_tmp.Full_Name,
                 Email = old_user_tmp.Email,
                 Password = old_user_tmp.Password
@@ -125,11 +125,11 @@ namespace SimpleSocialMediaAppTests.RepositoryTests
             var userDto = new UserDTO() { Full_Name = "old_user_name_edit", Email = "old_user@mail.com", Password = "123" };
 
             // Act
-            var result = await userRepository.UpdateUser(old_user.Id, userDto);
+            var result = await userRepository.UpdateUser(old_user.UserId, userDto);
 
             // Assert
             result.Should().NotBeNull();
-            result.Id.Should().Be(old_user.Id);     // Ensure the same object has been updated
+            result.UserId.Should().Be(old_user.UserId);     // Ensure the same object has been updated
             result.Full_Name.Should().NotBe(old_user.Full_Name);
         }
 
@@ -143,11 +143,11 @@ namespace SimpleSocialMediaAppTests.RepositoryTests
             var userRepository = new UserRepository(fakeDb, fakeMapper);
 
             var beforeUserTmp = fakeDb.Users.First();
-            var firstIdBeforeRemove = beforeUserTmp.Id;
+            var firstIdBeforeRemove = beforeUserTmp.UserId;
 
             // Act
             await userRepository.DeleteUser(firstIdBeforeRemove);
-            var firstIdAfterRemove = fakeDb.Users.First().Id;
+            var firstIdAfterRemove = fakeDb.Users.First().UserId;
 
             // Assert
             firstIdBeforeRemove.Should().NotBe(firstIdAfterRemove);

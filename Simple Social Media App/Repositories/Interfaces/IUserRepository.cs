@@ -7,10 +7,10 @@ namespace Simple_Social_Media_App.Repositories.Interfaces
     public interface IUserRepository
     {
         Task<List<User>?> GetAll();
-        Task<User?> GetById(int id);
+        Task<User?> GetById(Guid id);
         Task<User> PostUser(UserDTO user);
-        Task<User?> UpdateUser(int id, UserDTO userDTO);
-        Task DeleteUser(int id);
+        Task<User?> UpdateUser(Guid id, UserDTO userDTO);
+        Task DeleteUser(Guid id);
         Task<User?> FindUserForLogin(LoginDTO loginDto);
     }
 }

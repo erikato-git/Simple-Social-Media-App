@@ -46,7 +46,7 @@ namespace Simple_Social_Media_App.Controllers
 
         // GET: api/Users/5
         [HttpGet("/get_user/{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<User>> GetUser(Guid id)
         {
             try
             {
@@ -64,9 +64,9 @@ namespace Simple_Social_Media_App.Controllers
         }
 
         // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("/update_user/{id}")]
-        public async Task<IActionResult> PutUser(int id, UserDTO userDTO)
+//        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PutUser(Guid id, UserDTO userDTO)
         {
             try
             {
@@ -101,10 +101,16 @@ namespace Simple_Social_Media_App.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("/create_user")]
         [AllowAnonymous]
+//        [ValidateAntiForgeryToken]
         public async Task<ActionResult<UserDTO>> PostUser(UserDTO userDto)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("User-information don't full-fill the requirements");
+                }
+
                 var result = await _userRepository.PostUser(userDto);
                 return StatusCode(200, result);
             }
@@ -116,7 +122,8 @@ namespace Simple_Social_Media_App.Controllers
 
         // DELETE: api/Users/5
         [HttpDelete("/delete_user/{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+//        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUser(Guid id)
         {
             try
             {
@@ -130,7 +137,10 @@ namespace Simple_Social_Media_App.Controllers
                     return BadRequest("Wrong user");
                 }
 
+
                 await _userRepository.DeleteUser(id);
+
+                await HttpContext.SignOutAsync();
                 return StatusCode(200, id);
             }
             catch (Exception ex)
@@ -160,7 +170,7 @@ namespace Simple_Social_Media_App.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, found.Full_Name),
-                    new Claim(ClaimTypes.NameIdentifier, found.Id.ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, found.UserId.ToString()),
                     new Claim(ClaimTypes.Role, "User")
                 };
 
