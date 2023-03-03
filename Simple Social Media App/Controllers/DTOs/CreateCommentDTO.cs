@@ -8,8 +8,8 @@ namespace Simple_Social_Media_App.Controllers.DTOs
         [Required]
         public string Content { get; set; } = string.Empty;
 
+        [Required]
         public Guid? PostId { get; set; }
-        public Guid? UserId { get; set; }
 
     }
 }

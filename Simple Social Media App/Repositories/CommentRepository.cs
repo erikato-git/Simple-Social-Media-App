@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Simple_Social_Media_App.Controllers.DTOs;
 using Simple_Social_Media_App.DataAccess;
 using Simple_Social_Media_App.DataAccess.Model;
@@ -17,39 +19,115 @@ namespace Simple_Social_Media_App.Repositories
             _mapper = mapper;
         }
 
-        public Task<Comment> CreateComment(CreateCommentDTO commentDto, User user, Post post)
+
+        public async Task<List<Comment>?> GetAll()
         {
-            throw new NotImplementedException();
+            return await _dataContext.Comments.ToListAsync();
         }
 
-        public Task DeleteComment(Guid id)
+        public async Task<Comment?> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            if (String.IsNullOrEmpty(id.ToString()))
+            {
+                throw new ArgumentNullException("id is empty");
+            }
+
+            var comment = await _dataContext.Comments.FindAsync(id);
+
+            if(comment == null)
+            {
+                return null;
+            }
+
+            return comment;
         }
 
-        public Task<List<Comment>?> GetAll()
+        public async Task<List<Comment>> GetAllCommentsByPost(Post post)
         {
-            throw new NotImplementedException();
+            if (post == null)
+            {
+                throw new ArgumentNullException("post is null");
+            }
+
+            var commentsByPost = await _dataContext.Comments.Where(x => x.PostId == post.PostId).ToListAsync();
+            
+            return commentsByPost;
         }
 
-        public Task<List<Comment>> GetAllCommentsByPost(Post post)
+        public async Task<List<Comment>> GetAllCommentsByUser(User user)
         {
-            throw new NotImplementedException();
+            if (user == null)
+            {
+                throw new ArgumentNullException("post is null");
+            }
+
+            var commentsByUser = await _dataContext.Comments.Where(x => x.UserId == user.UserId).ToListAsync();
+
+            return commentsByUser;
         }
 
-        public Task<List<Comment>> GetAllCommentsByUser(User user)
+
+        public async Task<Comment> CreateComment(CreateCommentDTO commentDto, User user)
         {
-            throw new NotImplementedException();
+            if ( commentDto == null || user == null )
+            {
+                throw new ArgumentNullException("comment, user or post is null");
+            }
+
+            var comment = _mapper.Map<Comment>(commentDto);
+            comment.UserId = user.UserId;
+            comment.User = user;
+            comment.PostId = commentDto.PostId;
+
+            var post = await _dataContext.Posts.FindAsync(commentDto.PostId);
+            comment.Post = post;
+
+            await _dataContext.Comments.AddAsync(comment);
+            _dataContext.SaveChanges();
+
+            return comment;
         }
 
-        public Task<Comment?> GetById(Guid id)
+        public async Task DeleteComment(Guid id)
         {
-            throw new NotImplementedException();
+            if (String.IsNullOrEmpty(id.ToString()))
+            {
+                throw new ArgumentNullException("id is empty");
+            }
+
+            var comment = await _dataContext.Comments.FindAsync(id);
+
+            if (comment == null)
+            {
+                throw new Exception("Comment not found");
+            }
+
+            _dataContext.Comments.Remove(comment);
+            _dataContext.SaveChanges();
+
+            return;
         }
 
-        public Task<Comment?> UpdateComment(Guid id, User user, Post post)
+
+        public async Task<Comment?> UpdateComment(Guid id, UpdateCommentDTO commentDto)
         {
-            throw new NotImplementedException();
+            if(String.IsNullOrEmpty(id.ToString()) || commentDto == null)
+            {
+                throw new ArgumentNullException("id or post is null");
+            }
+
+            var found = await _dataContext.Comments.FindAsync(id);
+
+            if(found == null)
+            {
+                return null;
+            }
+
+            _mapper.Map(commentDto, found);
+            _dataContext.SaveChanges();
+
+            return found;
+
         }
     }
 }

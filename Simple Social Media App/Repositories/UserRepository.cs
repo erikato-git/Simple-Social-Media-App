@@ -34,13 +34,12 @@ namespace Simple_Social_Media_App.Repositories
 
         public async Task<User?> GetById(Guid id)
         {
-            var user = await _context.Users.FindAsync(id);
-
-            if(user == null)
+            if (String.IsNullOrEmpty(id.ToString()))
             {
-                return null;
+                throw new ArgumentNullException("id null");
             }
 
+            var user = await _context.Users.FindAsync(id);
             return user;
         }
 
@@ -48,6 +47,11 @@ namespace Simple_Social_Media_App.Repositories
 
         public async Task<User> PostUser(UserDTO userDto)
         {
+            if(userDto == null)
+            {
+                throw new ArgumentNullException("userDto is null");
+            }
+
             Random rnd = new();
             int salt = rnd.Next();
             
@@ -77,7 +81,13 @@ namespace Simple_Social_Media_App.Repositories
 
         public async Task<User?> UpdateUser(Guid id, UserDTO userDto)
         {
+            if (String.IsNullOrEmpty(id.ToString()) || userDto == null)
+            {
+                throw new ArgumentNullException("id or userDto is null");
+            }
+
             var found = await _context.Users.FindAsync(id);
+
             if(found == null)
             {
                 return null;
@@ -93,6 +103,11 @@ namespace Simple_Social_Media_App.Repositories
 
         public async Task DeleteUser(Guid id)
         {
+            if(String.IsNullOrEmpty(id.ToString()))
+            {
+                throw new ArgumentNullException("id is null");
+            }
+
             var user = await _context.Users.FindAsync(id);
 
             if(user == null)
@@ -110,18 +125,21 @@ namespace Simple_Social_Media_App.Repositories
 
         public async Task<User?> FindUserForLogin(LoginDTO loginDto)
         {
+            if(loginDto == null)
+            {
+                throw new ArgumentNullException("loginDto is null");
+            }
+
             var emailFound = await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(loginDto.Email));
+
             if(emailFound == null)
             {
                 return null;
             }
+
             var hashedPassword = HashPassword(loginDto.Password, emailFound.Salt.ToString());
             
-            var found = await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(loginDto.Email) && x.Password.Equals(hashedPassword));
-            if(found == null)
-            {
-                return null;
-            };
+            var found = await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(loginDto.Email) && x.Password.Equals(hashedPassword));;
 
             return found;
         }

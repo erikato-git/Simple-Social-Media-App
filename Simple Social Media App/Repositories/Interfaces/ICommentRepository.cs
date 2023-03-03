@@ -7,8 +7,8 @@ namespace Simple_Social_Media_App.Repositories.Interfaces
     {
         Task<List<Comment>?> GetAll();
         Task<Comment?> GetById(Guid id);
-        Task<Comment> CreateComment(CreateCommentDTO commentDto, User user, Post post);
-        Task<Comment?> UpdateComment(Guid id, User user, Post post);
+        Task<Comment> CreateComment(CreateCommentDTO commentDto, User user);
+        Task<Comment?> UpdateComment(Guid id, UpdateCommentDTO commentDto);
         Task DeleteComment(Guid id);
         Task<List<Comment>> GetAllCommentsByPost(Post post);
         Task<List<Comment>> GetAllCommentsByUser(User user);

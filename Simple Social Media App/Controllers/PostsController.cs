@@ -13,7 +13,6 @@ namespace Simple_Social_Media_App.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class PostsController : ControllerBase
     {
         private readonly IPostRepository _postRepository;
@@ -62,7 +61,6 @@ namespace Simple_Social_Media_App.Controllers
             }
         }
 
-        // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("/update_post/{id}")]
         public async Task<IActionResult> UpdatePost(Guid id, UpdatePostDTO updatePostDto)
@@ -96,7 +94,6 @@ namespace Simple_Social_Media_App.Controllers
 
         }
 
-        // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("/create_post")]
         public async Task<ActionResult<Post>> CreatePost(CreatePostDTO postDto)
@@ -107,7 +104,6 @@ namespace Simple_Social_Media_App.Controllers
                 
                 if(loginId == null) { return BadRequest("You need to log in again"); }
 
-                // TODO: skift ID's ud med string, når jeg tager GUID i anvendelse
                 var currentUser = await _userRepository.GetById(Guid.Parse(loginId));
 
                 if(currentUser== null) { return NotFound("Couldn't find logged in user"); }
@@ -121,7 +117,6 @@ namespace Simple_Social_Media_App.Controllers
             }
         }
 
-        // DELETE: api/Users/5
         [HttpDelete("/delete_post/{id}")]
         public async Task<IActionResult> DeletePost(Guid id)
         {
