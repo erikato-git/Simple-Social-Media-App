@@ -34,11 +34,6 @@ namespace Simple_Social_Media_App.Repositories
 
             var post = await _dataContext.Posts.FindAsync(id);
 
-            if(post == null)
-            {
-                return null;
-            }
-
             return post;
         }
 

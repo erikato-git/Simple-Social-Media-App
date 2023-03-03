@@ -11,6 +11,8 @@ namespace Simple_Social_Media_App.Utils
             CreateMap<UserDTO, User>(); 
             CreateMap<UpdatePostDTO, Post>();
             CreateMap<CreatePostDTO, Post>();
+            CreateMap<UpdateCommentDTO, Comment>();
+            CreateMap<CreateCommentDTO, Comment>();
 
         }
     }
