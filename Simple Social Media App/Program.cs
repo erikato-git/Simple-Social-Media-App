@@ -32,7 +32,22 @@ builder.Services.AddAuthentication()
     });
 
 
+builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("CorsPolicy", policy =>
+        {
+            policy
+            // .AllowAnyOrigin()
+            .WithOrigins("http://localhost:3000")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+        });
+    });
+
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -41,9 +56,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.UseCors("CorsPolicy");
 app.UseAuthorization();
 
 app.MapControllers()
