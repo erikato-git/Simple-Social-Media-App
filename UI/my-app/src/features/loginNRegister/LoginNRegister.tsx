@@ -34,8 +34,9 @@ function LoginNRegister() {
             headers: {
               'Content-Type': 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify({
-              email: 'new@mail.com',
+              email: 'dummy@mail.com',
               password: '123'
             })
           })
