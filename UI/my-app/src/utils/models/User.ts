@@ -3,12 +3,14 @@ import { Post } from "./Post";
 
 export interface User
 {
-    UserId: string;
-    Email: string;
-    Password: string;
-    Salt: number;
-    Profile_Picture: any;
-    Full_Name: string;
-    DateOfBirgh: Date;
-    Description: string;
+    userId : string,
+    email : string,
+    password : string,
+    salt : number,
+    full_Name : string,
+    profile_Picture : any,
+    dateOfBirth : any,
+    description : string,
+    posts : any,
+    comments : any
 }
