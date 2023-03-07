@@ -1,8 +1,16 @@
 import axios, { AxiosResponse } from "axios";
+import { LoginDTO } from "./DTOs/LoginDTO";
+import { Post } from "./models/Post";
+import { PostCreateDTO } from "./DTOs/PostCreateDTO";
+import { PostUpdateDTO } from "./DTOs/PostUpdateDTO";
 import { User } from "./models/User";
+import { UserCreateDTO } from "./DTOs/UserCreateDTO";
+import { UserUpdateDTO } from "./DTOs/UserUpdateDTO";
+import { CommentCreateDTO } from "./DTOs/CommentCreateDTO";
+import { CommentUpdateDTO } from "./DTOs/CommentUpdateDTO";
 
 
-axios.defaults.baseURL = 'http://localhost:5245/';
+axios.defaults.baseURL = 'http://localhost:5245';
     
 axios.interceptors.response.use(
     (response) => {
@@ -13,6 +21,11 @@ axios.interceptors.response.use(
       return Promise.reject(error);
     }
   );
+
+axios.interceptors.request.use((config) => {
+  config.withCredentials = true;
+  return config;
+});
 
 
 const responseBody = <T> (response: AxiosResponse<T>) => response.data;
@@ -26,20 +39,38 @@ const requests = {
 }
 
 // Get domain-specific requests and makes it type-safety
-const Users = {
-    getAll: () => requests.get<User[]>('/Users/get_all_users'),
-    getById: (id: string) => requests.get<User>(`Users/get_user/${id}`),
-    create: (user: User) => requests.post<void>(`Users/create_user`,user),
-    update: (user: User) => requests.put<void>(`Users/update_user/${user.UserId}`,user),
-    delete: (id: string) => requests.delete<void>(`/Users/delete_user/${id}`)
+const UserRequests = {
+    getAll: () => requests.get<User[]>('/get_all_users'),   // TODO: Use a UserDTO, never expose passwords etc.
+    getById: (id: string) => requests.get<User>(`/get_user/${id}`),   // TODO: Use a UserDTO, never expose passwords etc.
+    create: (userDto: UserCreateDTO) => requests.post<void>(`/create_user`,userDto),
+    update: (id: string, userDTO: UserUpdateDTO) => requests.put<void>(`/update_user/${id}`,userDTO),
+    delete: (id: string) => requests.delete<void>(`/delete_user/${id}`),
+    login: (loginDto: LoginDTO) => axios.post(`/login/`,loginDto),
+    logout: () => axios.post(`/logout`),
+}
+
+const PostRequests = {
+  getAll: () => requests.get<Post[]>('/get_all_posts'),
+  getById: (id: string) => requests.get<Post>(`/get_post/${id}`),
+  create: (postCreateDTO: PostCreateDTO) => requests.post<void>(`/create_post`,postCreateDTO),
+  update: (id: string, postUpdateDTO: PostUpdateDTO) => requests.put<void>(`/update_post/${id}`,postUpdateDTO),
+  delete: (id: string) => requests.delete<void>(`/delete_post/${id}`),
+}
+
+const CommentRequests = {
+  getAll: () => requests.get<Comment[]>('/get_all_comments'),
+  getById: (id: string) => requests.get<Comment>(`/get_comment/${id}`),
+  create: (commentCreateDTO: CommentCreateDTO) => requests.post<void>(`/create_comment`,commentCreateDTO),
+  update: (id: string, commentUpdateDTO: CommentUpdateDTO) => requests.put<void>(`/update_comment/${id}`,commentUpdateDTO),
+  delete: (id: string) => requests.delete<void>(`/delete_comment/${id}`),
 }
 
 
 
-
-
 const userAgent = {
-    Users
+  UserRequests,
+  PostRequests,
+  CommentRequests
 }
 
 export default userAgent;

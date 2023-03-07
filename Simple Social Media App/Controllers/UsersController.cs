@@ -184,22 +184,6 @@ namespace Simple_Social_Media_App.Controllers
 
                 await HttpContext.SignInAsync(cp, properties);
 
-                // var token = await HttpContext.GetTokenAsync("cookie","cookie-SSMA");
-
-                // if(token == null){
-                //     throw new Exception("Couldn't create cookie to the client");
-                // }
-
-                // var options = new CookieOptions
-                // {
-                //     HttpOnly = true,
-                //     Expires = DateTimeOffset.UtcNow.AddHours(2),
-                //     SameSite = SameSiteMode.Strict,
-                //     Secure = true
-                // };
-                // Response.Cookies.Append("SSMA_", token, options);
-
-
 
                 return Ok("Log in!");
                 //return LocalRedirect("/api/Posts/Home");
