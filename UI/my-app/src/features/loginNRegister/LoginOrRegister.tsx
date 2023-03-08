@@ -3,6 +3,7 @@ import { LoginDTO } from '../../utils/DTOs/LoginDTO';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from "yup";
+import { Link } from 'react-router-dom';
 
 
 
@@ -75,7 +76,7 @@ function LoginOrRegister() {
             <button
               className="bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 transition duration-200"
             >
-              Create Account
+              <Link to="/CreateAccount" style={{ color: 'black' }}>Create Account</Link>
             </button>
           </div>
         </div>

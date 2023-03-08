@@ -151,7 +151,7 @@ namespace Simple_Social_Media_App.Controllers
 
         [HttpPost("/login")]
         [AllowAnonymous]
-        public async Task<object> LogIn(LoginDTO loginDto)
+        public async Task<ActionResult> LogIn(LoginDTO loginDto)
         {
             try
             {
@@ -212,6 +212,24 @@ namespace Simple_Social_Media_App.Controllers
             }
         }
 
+        [HttpGet("/findUserByEmail/{email}")]
+        public async Task<ActionResult> FindUserByEmail(string email)
+        {
+            try
+            {
+                var result = await _userRepository.FindUserByEmail(email);
+                if (result == null)
+                {
+                    return NotFound("User not found");
+                }
+                return StatusCode(200, result);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }
