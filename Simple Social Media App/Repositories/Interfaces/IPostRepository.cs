@@ -10,6 +10,7 @@ namespace Simple_Social_Media_App.Repositories.Interfaces
         Task<Post> CreatePost(CreatePostDTO postDto, User user);
         Task<Post?> UpdatePost(Guid id, UpdatePostDTO postDto);
         Task DeletePost(Guid id);
+        Task<IEnumerable<Post>?> GetAllPostByUserId(Guid id);
 
     }
 }

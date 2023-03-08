@@ -145,6 +145,35 @@ namespace Simple_Social_Media_App.Controllers
         }
 
 
+        [HttpGet("/getPostsByUserId/{id}")]
+        public async Task<ActionResult<Post>> GetPostsByUserId(Guid id)
+        {
+            try
+            {
+                var loginId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (String.IsNullOrEmpty(loginId))
+                {
+                    return BadRequest("You need to log in again");
+                }
+
+                if(!loginId.Equals(id.ToString()))
+                {
+                    return BadRequest("You were trying to access another user's posts");
+                }
+
+                var posts = await _postRepository.GetAllPostByUserId(id);
+                return StatusCode(200, posts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
+
     }
 
 }
