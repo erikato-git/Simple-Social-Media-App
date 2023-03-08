@@ -56,6 +56,7 @@ const PostRequests = {
   create: (postCreateDTO: PostCreateDTO) => requests.post<void>(`/create_post`,postCreateDTO),
   update: (id: string, postUpdateDTO: PostUpdateDTO) => requests.put<void>(`/update_post/${id}`,postUpdateDTO),
   delete: (id: string) => requests.delete<void>(`/delete_post/${id}`),
+  getPostsByUserid: (id: string) => requests.get(`/GetPostsByUserId/${id}`)
 }
 
 const CommentRequests = {

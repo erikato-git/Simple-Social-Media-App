@@ -97,5 +97,16 @@ namespace Simple_Social_Media_App.Repositories
             return;
         }
 
+        public async Task<IEnumerable<Post>?> GetAllPostByUserId(Guid id)
+        {
+            if (String.IsNullOrEmpty(id.ToString()))
+            {
+                throw new ArgumentNullException("id is empty");
+            }
+
+            var postsByUserId = await _dataContext.Posts.Where(x => x.UserId == id).ToListAsync();
+
+            return postsByUserId;
+        }
     }
 }

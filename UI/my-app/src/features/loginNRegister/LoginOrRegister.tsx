@@ -31,6 +31,8 @@ function LoginOrRegister() {
     const submitForm = async (data: LoginDTO) => {
         console.log(data);
         await UserRequests.login(data)
+
+        // TODO: redirect to user's post-wall
     }
 
 
