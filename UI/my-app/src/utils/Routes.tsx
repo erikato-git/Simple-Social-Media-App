@@ -9,8 +9,9 @@ export const routes: RouteObject[] = [
         
         children: [
             // {path: '/', element: <LoginOrRegister/>},
-            // {path: '/CreateAccount', element: <CreateAccount/>},
-            {path: '/', element: <CreateAccount/>}
+            {path: '/', element: <CreateAccount/>},
+            {path: '/LoginOrRegister', element: <LoginOrRegister/>},
+            {path: '/CreateAccount', element: <CreateAccount/>},
         ]
     }
 ]

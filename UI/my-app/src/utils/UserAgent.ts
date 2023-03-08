@@ -47,6 +47,7 @@ const UserRequests = {
     delete: (id: string) => requests.delete<void>(`/delete_user/${id}`),
     login: (loginDto: LoginDTO) => axios.post(`/login/`,loginDto),
     logout: () => axios.post(`/logout`),
+    getByEmail: (email: string) => axios.get<User>(`/findUserByEmail/${email}`),
 }
 
 const PostRequests = {

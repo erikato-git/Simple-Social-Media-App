@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from "yup";
 import { UserCreateDTO } from '../../utils/DTOs/UserCreateDTO';
 import { ChangeEvent, useState } from 'react';
-
+import { Link } from 'react-router-dom';
 
 
 const loginSchema = Yup.object().shape({
@@ -31,7 +31,6 @@ function CreateAccount() {
     const { UserRequests } = userAgent;
     const [confirmPassword, setConfirmPassword] = useState('')
 
-
     const { register, handleSubmit, formState: { errors } } = useForm<UserCreateDTO>({
         resolver: yupResolver(loginSchema)
     })
@@ -46,8 +45,16 @@ function CreateAccount() {
             alert("Password and confirmed password are not the same")
             return
         }
-        await UserRequests.create(data)
+
+        const emailFound = await UserRequests.getByEmail(data.email);
+        if(emailFound){
+            alert("Email already exist")
+            return 
+        }
+
+        const createdUser = await UserRequests.create(data)
         // TODO: succes message
+        // TODO: navigate to post-wall for the createdUser-object
     }
 
 
@@ -109,7 +116,7 @@ function CreateAccount() {
               <div className='pt-2'>
                 <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200" type="submit"
                 >
-                    Login
+                    Create Account
                 </button>
               </div>
             </form>
@@ -118,7 +125,7 @@ function CreateAccount() {
             <button
               className="bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 transition duration-200"
             >
-              Create Account
+              <Link to='/LoginOrRegister' style={{ color: 'black' }}>Go to login</Link>
             </button>
           </div>
         </div>

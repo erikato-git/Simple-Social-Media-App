@@ -144,6 +144,21 @@ namespace Simple_Social_Media_App.Repositories
             return found;
         }
 
+        public async Task<User> FindUserByEmail(string email)
+        {
+            if (String.IsNullOrEmpty(email))
+            {
+                throw new ArgumentNullException("email is null");
+            }
 
+            var found = await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
+
+            if(found == null) 
+            {
+                throw new Exception("User not found");
+            }
+
+            return found;
+        }
     }
 }

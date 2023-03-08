@@ -12,5 +12,6 @@ namespace Simple_Social_Media_App.Repositories.Interfaces
         Task<User?> UpdateUser(Guid id, UserDTO userDTO);
         Task DeleteUser(Guid id);
         Task<User?> FindUserForLogin(LoginDTO loginDto);
+        Task<User> FindUserByEmail(string email);
     }
 }
