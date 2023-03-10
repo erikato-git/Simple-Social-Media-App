@@ -39,8 +39,8 @@ function LoginOrRegister() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-500">
           <div className="w-full max-w-md p-9 bg-white rounded-md shadow-md">
-            <h2 className="text-giant font-big text-gray-900 mb-6 flex flex-col items-center justify-center">Login</h2>
-
+            <h2 className="text-giant font-big text-gray-900 mb-6 flex flex-col items-center justify-center">
+              Login</h2>
             <form className='pt-1' onSubmit={handleSubmit(submitForm)}>
               <div className="mb-4">
                 <label className="block text-gray-700 font-medium mb-2">
