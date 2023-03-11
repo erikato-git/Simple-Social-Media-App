@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx/dist/internal";
+import { makeAutoObservable } from "mobx";
 import { Post } from "../../models/Post";
 
 

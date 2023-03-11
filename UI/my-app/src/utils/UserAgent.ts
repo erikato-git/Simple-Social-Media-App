@@ -51,20 +51,20 @@ const UserRequests = {
 }
 
 const PostRequests = {
-  getAll: () => requests.get<Post[]>('/get_all_posts'),
-  getById: (id: string) => requests.get<Post>(`/get_post/${id}`),
-  create: (postCreateDTO: PostCreateDTO) => requests.post<void>(`/create_post`,postCreateDTO),
-  update: (id: string, postUpdateDTO: PostUpdateDTO) => requests.put<void>(`/update_post/${id}`,postUpdateDTO),
-  delete: (id: string) => requests.delete<void>(`/delete_post/${id}`),
-  getPostsByUserid: (id: string) => requests.get(`/GetPostsByUserId/${id}`)
+    getAll: () => requests.get<Post[]>('/get_all_posts'),
+    getById: (id: string) => requests.get<Post>(`/get_post/${id}`),
+    create: (postCreateDTO: PostCreateDTO) => requests.post<void>(`/create_post`,postCreateDTO),
+    update: (id: string, postUpdateDTO: PostUpdateDTO) => requests.put<void>(`/update_post/${id}`,postUpdateDTO),
+    delete: (id: string) => requests.delete<void>(`/delete_post/${id}`),
+    getPostsByUserid: (id: string) => requests.get<Post[]>(`/GetPostsByUserId/${id}`)
 }
 
 const CommentRequests = {
-  getAll: () => requests.get<Comment[]>('/get_all_comments'),
-  getById: (id: string) => requests.get<Comment>(`/get_comment/${id}`),
-  create: (commentCreateDTO: CommentCreateDTO) => requests.post<void>(`/create_comment`,commentCreateDTO),
-  update: (id: string, commentUpdateDTO: CommentUpdateDTO) => requests.put<void>(`/update_comment/${id}`,commentUpdateDTO),
-  delete: (id: string) => requests.delete<void>(`/delete_comment/${id}`),
+    getAll: () => requests.get<Comment[]>('/get_all_comments'),
+    getById: (id: string) => requests.get<Comment>(`/get_comment/${id}`),
+    create: (commentCreateDTO: CommentCreateDTO) => requests.post<void>(`/create_comment`,commentCreateDTO),
+    update: (id: string, commentUpdateDTO: CommentUpdateDTO) => requests.put<void>(`/update_comment/${id}`,commentUpdateDTO),
+    delete: (id: string) => requests.delete<void>(`/delete_comment/${id}`),
 }
 
 

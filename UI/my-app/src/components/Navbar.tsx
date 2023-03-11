@@ -9,7 +9,7 @@ function Navbar() {
             <a href="/Profile" className="text-black hover:text-darkGrayishBlue">Profile</a>
             <p className='pt-4'>[Searchbar]</p>
             <p></p>
-            <a href="Contact" className="text-black hover:text-darkGrayishBlue">Contact</a>
+            <a href="About" className="text-black hover:text-darkGrayishBlue">About</a>
             <a href="#" className="text-black hover:text-darkGrayishBlue">Log out</a>
         </nav>
       </div>

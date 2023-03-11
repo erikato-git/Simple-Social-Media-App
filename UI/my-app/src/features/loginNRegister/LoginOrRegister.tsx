@@ -3,7 +3,11 @@ import { LoginDTO } from '../../utils/DTOs/LoginDTO';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from "yup";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import { useStore } from '../../utils/state_mgmt/Store';
+import { Button } from 'semantic-ui-react';
+
 
 
 
@@ -20,20 +24,27 @@ const loginSchema = Yup.object().shape({
 });
 
 
-function LoginOrRegister() {
+export default observer(function LoginOrRegister() {
 
     const { UserRequests } = userAgent;
+    const { userStore } = useStore();
+    const navigate = useNavigate();
 
     const { register, handleSubmit, formState: { errors } } = useForm<LoginDTO>({
         resolver: yupResolver(loginSchema)
     })
 
-    const submitForm = async (data: LoginDTO) => {
-        console.log(data);
-        await UserRequests.login(data)
+    const submitForm = async (loginDto: LoginDTO) => {
+        // console.log(data);
+        const loggedInUser = await (await UserRequests.login(loginDto)).data
+        if(!loggedInUser){
+          return;
+        }
+        userStore.loggedInUser = loggedInUser;
+        navigate('/Home')
 
-        // TODO: redirect to user's post-wall
-    }
+        // Kig på Neil Cummings kapitel om client side login
+      }
 
 
     return (
@@ -67,10 +78,10 @@ function LoginOrRegister() {
               </div>
 
               <div className='pt-2'>
-                <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200" type="submit"
-                >
-                    Login
-                </button>
+                <Button>
+                  Login
+                </Button>
+
               </div>
             </form>
 
@@ -83,5 +94,5 @@ function LoginOrRegister() {
           </div>
         </div>
       );
-    }
-  export default LoginOrRegister;
+    })
+ 

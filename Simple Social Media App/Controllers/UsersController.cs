@@ -184,8 +184,7 @@ namespace Simple_Social_Media_App.Controllers
 
                 await HttpContext.SignInAsync(cp, properties);
 
-
-                return Ok("Log in!");
+                return Ok(found);
                 //return LocalRedirect("/api/Posts/Home");
 
             }
