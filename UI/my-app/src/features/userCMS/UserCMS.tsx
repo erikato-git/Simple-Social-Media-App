@@ -1,22 +1,20 @@
+import { observer } from 'mobx-react-lite'
 import React from 'react'
 import Navbar from '../../components/Navbar'
+import ProfileSidebar from './ProfileSidebar'
 
-function UserCMS() {
+export default observer (function UserCMS() {
   return (
     <div className='container relative mx-auto'>
       <Navbar />
         {/* UserCMS-sidebar */}
         <div className='py-5 flex flex-row'>
-            <nav className="flex flex-col w-1/5 text-left space-y-12 pt-10">
-                <a href="/UserCMS" className="text-black hover:text-darkGrayishBlue">Personal Info</a>
-                <a href="/Security" className="text-black hover:text-darkGrayishBlue">Security</a>
-            </nav>
-
+            <ProfileSidebar />
             {/* User Update Form */}
             <form action="" className='w-4/5'>
-                <div className="flex flex-row p-10 text-left justify-between">
+                <div className="flex flex-col md:flex-row p-10 text-left justify-between">
                     {/* Field inputs */}
-                    <div className="flex flex-col w-2/5 space-y-8">
+                    <div className="flex flex-col w-2/5 space-y-8 mb-4">
                         <div className='space-y-4'>
                             <h6 className="">Full name</h6>
                             <input 
@@ -43,7 +41,7 @@ function UserCMS() {
                     </div>
 
                     {/* Image input */}
-                    <div className='mx-auto w-2/5 space-y-4'>
+                    <div className='md:mx-auto w-2/5 space-y-4'>
                         <h6>Choose profile-picture</h6>
 
                         <div className='border border-solid border-gray-400 py-20'></div>
@@ -71,6 +69,4 @@ function UserCMS() {
     </div>
 
     )
-}
-
-export default UserCMS
+})

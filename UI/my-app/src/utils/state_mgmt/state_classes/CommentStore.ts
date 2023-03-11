@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx/dist/api/makeObservable";
+import { makeAutoObservable } from "mobx";
 import { Comment } from "../../models/Comment";
 
 

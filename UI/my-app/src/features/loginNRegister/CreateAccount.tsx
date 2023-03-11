@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { UserCreateDTO } from '../../utils/DTOs/UserCreateDTO';
 import { ChangeEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
 
 
 const loginSchema = Yup.object().shape({
@@ -26,7 +27,7 @@ const loginSchema = Yup.object().shape({
 });
 
 
-function CreateAccount() {
+export default observer(function CreateAccount() {
 
     const { UserRequests } = userAgent;
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -130,5 +131,4 @@ function CreateAccount() {
           </div>
         </div>
       );
-    }
-  export default CreateAccount;
+    })
