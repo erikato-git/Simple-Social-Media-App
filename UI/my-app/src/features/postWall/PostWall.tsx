@@ -9,34 +9,12 @@ import userAgent from '../../utils/UserAgent';
 
 export default observer (function PostWall() {
     const { userStore } = useStore();
-    let [currentUser, SetCurrentUser] = useState(userStore.loggedInUser)
-    const [posts, setPosts] = useState<Post[]>([]);
+    let [currentUser, setCurrentUser] = useState(userStore.loggedInUser)
+    const [posts, setPosts] = useState<Post[]>(currentUser?.posts);
     const [loading, setLoading] = useState<boolean>(true);
 
 
-    // useEffect(() => {
-    //   async function FetchPosts(){
-    //     try {
-    //       if(currentUser){
-    //         const result = await userAgent.PostRequests.getPostsByUserid(currentUser.userId)
-    //         setPosts(result)
-    //       }
-    //     } catch (error) {
-    //       console.log("Error: fetch posts: " + error);
-    //     }
-    //   }
-
     useEffect(() => {
-      async function FetchPosts(){
-        try {
-          if(currentUser){
-            const result = await userAgent.PostRequests.getPostsByUserid(currentUser.userId)
-            setPosts(result)
-          }
-        } catch (error) {
-          console.log("Error: fetch posts: " + error);
-        }
-      }
 
       async function RefreshLoggedInUser(){
         try {
@@ -48,24 +26,36 @@ export default observer (function PostWall() {
               throw new Error("Couldn't refresh user")
             }
 
-            SetCurrentUser(refrehedUserData);
-            console.log("currentUser - inside: " + currentUser);
-            console.log("userStore.loggedInUser - inside: " + userStore.loggedInUser);
+            setCurrentUser(refrehedUserData);
           }
         } catch (error) {
           console.log("Error: refresh loggedInUser: " + error);
         }
       }
+
+      async function FetchPosts(){
+        try {
+          if(currentUser && !posts){
+            const posts = await userAgent.PostRequests.getPostsByUserid(currentUser.userId)
+            setPosts(posts)
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
       
       RefreshLoggedInUser();
       FetchPosts();
-      
-      // setLoading(false)
 
-    },[currentUser])
+      setLoading(false)
+
+    },[currentUser,posts,loading])
 
 
-    console.log("CurrentUser: " + currentUser);
+
+    console.log("CurrentUser: " + currentUser?.userId);
+    console.log("Posts: " + posts);
+    console.log("Loading: " + loading);
 
 
     function uploadImage(files: any){
@@ -83,7 +73,7 @@ export default observer (function PostWall() {
           :
           <div>
             {
-              currentUser ? 
+              true ? 
               
               <div>
 
@@ -109,17 +99,24 @@ export default observer (function PostWall() {
                       {/* Post-overview: ordered in dato descending order newest -> oldest */}
                   
                       <div className='w-4/5 mx-auto text-center mt-6'>
-                        <ul className='space-y-20'>
-                          {posts.map(post => (
-                            <li key={post.postId}>
-                              <p>{post.content}</p>
-                              <p>{post.createdAt?.toString()}</p>
-                              <p>{post.image}</p>
-                              <p>{post.userId}</p>
-                              <p>{post.user?.full_Name}</p>
-                            </li>
-                          ))}
-                        </ul>
+
+                        {
+                          posts ? 
+                          <ul className='space-y-20'>
+                            {posts.map(post => (
+                              <li key={post.postId}>
+                                <p>{post.content}</p>
+                                <p>{post.createdAt?.toString()}</p>
+                                <p>{post.image}</p>
+                                <p>{post.userId}</p>
+                                <p>{post.user?.full_Name}</p>
+                              </li>
+                            ))}
+                          </ul>
+                          :
+                          <div></div>
+                        }
+
                       </div>
               
                     </div>
