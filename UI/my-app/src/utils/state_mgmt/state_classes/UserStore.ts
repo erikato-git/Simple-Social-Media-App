@@ -8,6 +8,7 @@ export default class UserStore
     loggedInUser: User | undefined;
     userStore: any;
 
+    
     constructor(){
         makeAutoObservable(this)
     }
