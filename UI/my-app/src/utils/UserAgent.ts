@@ -48,6 +48,7 @@ const UserRequests = {
     login: (loginDto: LoginDTO) => axios.post(`/login/`,loginDto),
     logout: () => axios.post(`/logout`),
     getByEmail: (email: string) => axios.get<User>(`/findUserByEmail/${email}`),
+    refreshLoggedInUser: () => axios.get<User>(`/returnLoggedInUserWhileSessionHasntExpired`),
 }
 
 const PostRequests = {

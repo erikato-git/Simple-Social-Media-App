@@ -230,5 +230,30 @@ namespace Simple_Social_Media_App.Controllers
             }
         }
 
+
+        // Used when refreshing the client
+        [HttpGet("/returnLoggedInUserWhileSessionHasntExpired")]
+        public async Task<ActionResult> ReturnLoggedInUserWhileSessionHasntExpired()
+        {
+            try
+            {
+                var loginId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if(String.IsNullOrEmpty(loginId)) 
+                { 
+                    return BadRequest("You need to log in again"); 
+                };
+
+                var currentUser = await _userRepository.GetById(Guid.Parse(loginId));
+
+                return StatusCode(200, currentUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
     }
 }

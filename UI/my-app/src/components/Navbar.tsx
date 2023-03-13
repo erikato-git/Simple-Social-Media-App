@@ -5,12 +5,12 @@ function Navbar() {
     return (
       <div className='py-5'>
         <nav className="flex items-center justify-between text-xl">
-            <a href="/Home" className="text-black hover:text-darkGrayishBlue">Home</a>
-            <a href="/Profile" className="text-black hover:text-darkGrayishBlue">Profile</a>
+            <Link to="/Home" className="text-black hover:text-darkGrayishBlue">Home</Link>
+            <Link to="/Profile" className="text-black hover:text-darkGrayishBlue">Profile</Link>
             <p className='pt-4'>[Searchbar]</p>
             <p></p>
-            <a href="About" className="text-black hover:text-darkGrayishBlue">About</a>
-            <a href="#" className="text-black hover:text-darkGrayishBlue">Log out</a>
+            <Link to="/About" className="text-black hover:text-darkGrayishBlue">About</Link>
+            <Link to="#" className="text-black hover:text-darkGrayishBlue">Log out</Link>
         </nav>
       </div>
     );
